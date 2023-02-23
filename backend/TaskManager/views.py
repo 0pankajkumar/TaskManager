@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import TaskSerializer
+from .serializers import AuditTrialSerializer, TaskSerializer
 from .models import Task
 
 
@@ -9,9 +9,9 @@ class TaskView(viewsets.ModelViewSet):
     queryset = Task.objects.all()
 
 
-# class AuditTrailView(viewsets.ModelViewSet):
-#     serializer_class = AuditTrialSerializer
-#     queryset = Task.objects.all()
+class AuditTrailView(viewsets.ModelViewSet):
+    serializer_class = AuditTrialSerializer
+    queryset = Task.objects.all()
 
 
 

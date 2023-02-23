@@ -21,7 +21,7 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register(r'tasks', views.TaskView, 'task')
-# router.register(r'auditTrials', views.AuditTrailView, 'auditTrial')
+router.register(r'auditTrial', views.AuditTrailView, 'auditTrial')
 
 
 urlpatterns = [
