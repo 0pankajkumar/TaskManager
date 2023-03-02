@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 
 
   
-export default function CustomButton({props}) {
+export default function CustomButton({buttonType, task, updateTaskCard}) {
 
 
     const [showUpdateModal, setUpdateShowModal] = useState(false);
@@ -22,19 +22,17 @@ export default function CustomButton({props}) {
         setAuditTrialShowModal(false);
     };
 
-    const handleSave = (e) => {    
+    const handleSave = (e) => {   
+        console.log("Save clicked"); 
         console.log(taskDetails);
-        props.task = taskDetails;
-        props.handler.taskCardDataModifier({
-            ...taskDetails,
-            status: taskDetails.status
-        });
+        task = taskDetails;
+        updateTaskCard({...taskDetails, "status": taskDetails.status});
         handleClose();
     }
 
     useEffect(() => {
-        setTaskDetailsSelection(props.task);
-    }, [props.task]);
+        setTaskDetailsSelection(task);
+    }, [task]);
 
     function handleFormChange(e){
         setTaskDetailsSelection({...taskDetails, status: e.target.value});
@@ -45,7 +43,7 @@ export default function CustomButton({props}) {
             <div>
                 <Modal show={showUpdateModal} onHide={handleClose}>
                     <Modal.Header closeButton>
-                    <Modal.Title>Update {props.task.title}</Modal.Title>
+                    <Modal.Title>Update {task.title}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form.Select aria-label="status-selection-options" onChange={handleFormChange} >
@@ -77,7 +75,7 @@ export default function CustomButton({props}) {
                     <Modal.Header closeButton>
                     <Modal.Title>Audit Trial</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>{props.task.eta_updates}</Modal.Body>
+                    <Modal.Body>{task.eta_updates}</Modal.Body>
                     <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
@@ -91,10 +89,10 @@ export default function CustomButton({props}) {
     };
 
 
-    if(props.buttonType==="Update"){
+    if(buttonType==="Update"){
         return UpdateButton();
     }
-    else if(props.buttonType==="AuditTrial"){
+    else if(buttonType==="AuditTrial"){
         return AuditTrialButton();
     }
 }

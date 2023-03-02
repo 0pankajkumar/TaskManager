@@ -4,26 +4,28 @@ import CustomButton from './buttons/buttons';
   export default function TaskCard(props) {
     const [taskCardData, taskCardDataModifier] = useState(
         {
-            "id": "null",
-            "title": null,
-            "eta": null,
-            "status": null
+            "id": props.task.id,
+            "title": props.task.title,
+            "eta": props.task.eta,
+            "status": props.task.status
         }
     );
 
-    taskCardDataModifier({
-      ...taskCardData
-    });
+    function updateTaskCard(task){
+      console.log("Main card update called", task);
+      taskCardDataModifier(task);
+    }
+
+    
 
     return (
       <div>
-        
-        ID : {props.task.id}<br></br>
-        Title: {props.task.title}<br></br>
-        ETA: {props.task.eta}<br></br>
-        status: {props.task.status}<br></br>
-        <CustomButton props={{buttonType:"Update", task:props.task, handler:taskCardDataModifier}}/>
-        <CustomButton props={{buttonType:"AuditTrial", task:props.task}}/>
+        ID : {taskCardData.id}<br></br>
+        Title: {taskCardData.title}<br></br>
+        ETA: {taskCardData.eta}<br></br>
+        status: {taskCardData.status}<br></br>
+        <CustomButton buttonType={"Update"} task={props.task} updateTaskCard={updateTaskCard}/>
+        <CustomButton buttonType={"AuditTrial"} task={props.task}/>
         <br></br><br></br>
       </div>
     );
