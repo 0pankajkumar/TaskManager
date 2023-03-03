@@ -1,24 +1,32 @@
 
+import { useState, useEffect } from 'react';
 import './App.css';
 import TaskCard from './components/TaskCard';
-import {fakeData} from './components/fakeData';
-
+import axios from "axios";
 
 
 function App() {
-  const rows = [];
-  fakeData.forEach((task, index) => {
-    rows.push(<TaskCard 
-        key={index} 
-        task={task}
-      />);
-  })
+
+  const [tasks, setTasks] = useState();
+  let localFlaskServer = "http://127.0.0.1:5000"
+
+  const fetchData = () => {
+    return axios.get(localFlaskServer + '/tasks')
+          .then((response) => setTasks(response.data));
+  }
+
+  useEffect(() => {
+    fetchData();
+  },[])
+  
+ 
   return (
     <div className="App">
       <h1>Task Manager</h1>
       <header className="App-header">
-        {rows}
-        
+        {tasks && tasks.map((task, index) => 
+          <TaskCard key={index} task={task}/>
+        )}
       </header>
     </div>
   );

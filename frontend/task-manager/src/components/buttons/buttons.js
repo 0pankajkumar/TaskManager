@@ -2,8 +2,11 @@ import React, {useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.css';
-import { statusOptions } from './helpers';
+import { statusOptions, persistInBackend, getAuditTrial } from './helpers';
 import Form from 'react-bootstrap/Form';
+import axios from 'axios';
+import AuditTrialRow from './auditTrialRow';
+
 
 
   
@@ -13,9 +16,30 @@ export default function CustomButton({buttonType, task, updateTaskCard}) {
     const [showUpdateModal, setUpdateShowModal] = useState(false);
     const [showAuditTrialModal, setAuditTrialShowModal] = useState(false);
     const [taskDetails, setTaskDetailsSelection] = useState();
+    const [auditTrialData, setAuditTrialData] = useState([]);
+
+    let localFlaskServer = "http://127.0.0.1:5000";
 
     const onUpdateClick = () => setUpdateShowModal(true);
-    const onAuditTrialClick = () => setAuditTrialShowModal(true);
+    const onAuditTrialClick = () => {
+        setAuditTrialShowModal(true);
+        // getAuditTrial(taskDetails).then((res) => {
+        //     console.log("updating sate");
+        //  setAuditTrialData(res)}).catch(e => console.log("error", e));
+
+        axios.get(localFlaskServer + '/audittrial/' + taskDetails.id)
+        .then(function (response) {
+            // handle success
+            console.log(response, "resp received");
+            console.log(response.data, "resp returned back");
+            console.log(typeof(response.data));
+            setAuditTrialData(Array.from(response.data));
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+    };
 
     const handleClose = () => {
         setUpdateShowModal(false);
@@ -27,12 +51,13 @@ export default function CustomButton({buttonType, task, updateTaskCard}) {
         console.log(taskDetails);
         task = taskDetails;
         updateTaskCard({...taskDetails, "status": taskDetails.status});
+        persistInBackend(taskDetails);
         handleClose();
     }
 
     useEffect(() => {
         setTaskDetailsSelection(task);
-    }, [task]);
+    }, [task, auditTrialData]);
 
     function handleFormChange(e){
         setTaskDetailsSelection({...taskDetails, status: e.target.value});
@@ -75,7 +100,7 @@ export default function CustomButton({buttonType, task, updateTaskCard}) {
                     <Modal.Header closeButton>
                     <Modal.Title>Audit Trial</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>{task.eta_updates}</Modal.Body>
+                    <Modal.Body>{auditTrialData && auditTrialData.length>0 && auditTrialData.map(row => <AuditTrialRow key={row.eventId} new_value={row.new_value} timestamp={row.timestamp} />)}</Modal.Body>
                     <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close

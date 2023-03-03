@@ -1,8 +1,10 @@
 import json
 import time
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from flask_cors import CORS
 import sqlite3 as sql
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route("/")
@@ -19,7 +21,6 @@ def index():
     json_data = []
     for result in data:
         json_data.append(dict(zip(row_headers, result)))
-    print(json_data)
     return jsonify(json_data)
 
 
@@ -44,10 +45,11 @@ def add_user():
 
 @app.route("/update", methods=['POST'])
 def update():
+    print(type(request.json))
     if request.method == 'POST':
-        id = request.form['id']
-        field_updated = request.form['update_field']
-        new_value = request.form['update_value']
+        id = request.json['id']
+        field_updated = request.json['update_field']
+        new_value = request.json['update_value']
 
         con = sql.connect("db_tasks.db")
         cur = con.cursor()
