@@ -22,7 +22,7 @@ import CustomButton from './buttons/modifierButtons';
       <div>
         ID : {taskCardData.id}<br></br>
         Title: {taskCardData.title}<br></br>
-        ETA: {new Date(taskCardData.eta).toISOString().split('T')[0]}<br></br>
+        ETA: {new Date(taskCardData.eta).toISOString()}<br></br>
         status: {taskCardData.status}<br></br>
         <CustomButton buttonType={"Update"} task={props.task} updateTaskCard={updateTaskCard}/>
         <CustomButton buttonType={"AuditTrial"} task={props.task}/>
