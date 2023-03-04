@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import time
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
@@ -27,9 +28,10 @@ def index():
 @app.route("/add", methods=['POST'])
 def add_user():
     if request.method == 'POST':
-        title = request.form['title']
-        eta = int(request.form['eta'])
-        status = request.form['status']
+        title = request.json['title']
+        eta = int(datetime.strptime(
+            request.json['eta'], "%Y-%m-%d").timestamp())
+        status = request.json['status']
         print(title, eta, status)
         con = sql.connect("db_tasks.db")
         cur = con.cursor()

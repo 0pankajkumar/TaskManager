@@ -13,7 +13,7 @@ export function persistInBackend(taskDetails){
         .then(function (response) {
             // handle success
             console.log(response);
-            return JSON.parse(response.data);
+            return response.data;
         })
         .catch(function (error) {
             // handle error

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import CustomButton from './buttons/buttons';
+import CustomButton from './buttons/modifierButtons';
   
   export default function TaskCard(props) {
     const [taskCardData, taskCardDataModifier] = useState(

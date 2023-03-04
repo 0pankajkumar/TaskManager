@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import TaskCard from './components/TaskCard';
 import axios from "axios";
+import AddNewTaskButton from './components/buttons/addNewTask';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
     <div className="App">
       <h1>Task Manager</h1>
       <header className="App-header">
+        <AddNewTaskButton />
         {tasks && tasks.map((task, index) => 
           <TaskCard key={index} task={task}/>
         )}
